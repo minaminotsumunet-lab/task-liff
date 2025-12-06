@@ -32,16 +32,17 @@
   <div id="status"></div>
 
   <script>
-    // ★★ここをあなたの環境に合わせて必ず確認★★
-    const LIFF_ID  = '2008630984-XngdzBvN';  // あなたの LIFF ID
-    const FORM_URL = 'https://script.google.com/macros/s/AKfycbyCp4GAzeOuAOWNs2n5ksCySKUvlQV9flMlOhkt8DY-6crbj3dBlcVxjgj8fq6jbkk/exec'; 
-    // ↑ タスクフォームGASの /exec URL
+    // ★ あなたの LIFF ID
+    const LIFF_ID  = '2008630984-XngdzBvN';
+
+    // ★ GAS のフォーム Webアプリ（/exec）のURL
+    const FORM_URL = 'https://script.google.com/macros/s/AKfycbyCp4GAzeOuAOWNs2n5ksCySKUvlQV9flMlOhkt8DY-6crbj3dBlcVxjgj8fq6jbkk/exec';
 
     const statusEl = document.getElementById('status');
     const openBtn  = document.getElementById('openBtn');
     const log = msg => statusEl.textContent = msg;
 
-    // ボタン：フォールバック（IDなしでフォームだけ開く）
+    // 手動フォールバック用ボタン
     openBtn.onclick = () => {
       location.href = FORM_URL;
     };
@@ -60,7 +61,7 @@
           return;
         }
 
-        // ★ close=1 ならフォームから戻ってきたのでそのまま閉じる
+        // フォームから「?close=1」で戻ってきた場合 → この画面を閉じる
         if (shouldClose) {
           log('ウィンドウを閉じます…');
           liff.closeWindow();
