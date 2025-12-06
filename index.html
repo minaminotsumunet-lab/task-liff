@@ -32,27 +32,38 @@
   <div id="status"></div>
 
   <script>
-    // ★ここをあなたの情報に書き換え
-    const LIFF_ID  = '2008630984-XngdzBvN'; // あなたの LIFF ID
-    const FORM_URL = 'https://script.google.com/macros/s/AKfycbyCp4GAzeOuAOWNs2n5ksCySKUvlQV9flMlOhkt8DY-6crbj3dBlcVxjgj8fq6jbkk/exec'; // さっきのGAS WebアプリURL
+    // ★★ここをあなたの環境に合わせて必ず確認★★
+    const LIFF_ID  = '2008630984-XngdzBvN';  // あなたの LIFF ID
+    const FORM_URL = 'https://script.google.com/macros/s/AKfycbyCp4GAzeOuAOWNs2n5ksCySKUvlQV9flMlOhkt8DY-6crbj3dBlcVxjgj8fq6jbkk/exec'; 
+    // ↑ タスクフォームGASの /exec URL
 
     const statusEl = document.getElementById('status');
     const openBtn  = document.getElementById('openBtn');
     const log = msg => statusEl.textContent = msg;
 
+    // ボタン：フォールバック（IDなしでフォームだけ開く）
     openBtn.onclick = () => {
-      // フォールバック（IDなしでフォームだけ開く）
       location.href = FORM_URL;
     };
 
     async function main(){
       try{
+        const params = new URLSearchParams(location.search);
+        const shouldClose = params.get('close') === '1';
+
         log('LIFF 初期化中…');
         await liff.init({ liffId: LIFF_ID });
 
         if (!liff.isLoggedIn()) {
           log('ログインします…');
           liff.login({ redirectUri: location.href });
+          return;
+        }
+
+        // ★ close=1 ならフォームから戻ってきたのでそのまま閉じる
+        if (shouldClose) {
+          log('ウィンドウを閉じます…');
+          liff.closeWindow();
           return;
         }
 
